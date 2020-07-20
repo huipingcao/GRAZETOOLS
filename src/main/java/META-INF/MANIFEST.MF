@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+Main-Class: range_pixel.range_pixel
+Class-Path: jline-3.13.3.jar jline-terminal-3.13.3.jar progressbar-0.8.1
+ .jar jline-terminal-jansi-3.13.3.jar jansi-1.18.jar
+

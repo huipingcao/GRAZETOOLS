@@ -1,0 +1,56 @@
+<h1>Tools for cow speed calculation</h1>
+
+<h2>Tool description</h2>
+
+<p>This tutorial presents how to calculate distance traveled, path sinuosity, and woodland preference index for each cow.
+There are 4 time periods considered: 24 hours; daytime hours; pre-sunrise night hours (from midnight to sunrise); and post-sunset night hours (from sunset to midnight). </p>
+
+<h2>Program</h2>
+
+<p>We design a Java program that can automatically do this work.  The program can be downloaded at <a href="./files/range_speed/AnimalDataInitialProcessing/Calculations.jar">link</a></p>
+
+<h2>Date format</h2>
+
+<p>The input of this the Java program are 3 files:</p>
+
+<ol>
+<li><p>DataWithPosition.csv.  It contains 6 columns:</p>
+
+<ol>
+<li>CowID</li>
+<li>Date (mm/dd/yyyy)</li>
+<li>Time (hh:mm:ss AM/PM)</li>
+<li>Northing and easting (GPS coordinate)</li>
+<li>Woodlan (1 if the cow is in woodlang; -9999 else)</li>
+</ol></li>
+<li><p>Time.csv.  It contains 3 columns:  </p>
+
+<ol>
+<li>Date (yyyy-mm-dd)</li>
+<li>Sunrise and sunset (hh-mm-dd)</li>
+</ol></li>
+<li><p>Weather.csv.  It contains 7 columns:</p>
+
+<ol>
+<li>Date (mm/dd/yyyy) </li>
+<li>Cum_PPT_in (float number)</li>
+<li>Act_PPT_in (float number)</li>
+<li>Temp_c (float number)</li>
+<li>Wind_degree (float number)</li>
+<li>Wind_mph (float number)</li>
+<li>Lunar (float number)</li>
+</ol></li>
+</ol>
+
+<p>Here are the examples of these 3 files: <a href="./files/range_speed/AnimalDataInitialProcessing/DataWithPosition.csv">DataWithPosition.csv</a>  <a href="./files/range_speed/AnimalDataInitialProcessing/Time.csv">Time.csv</a>  <a href="./files/range_speed/AnimalDataInitialProcessing/Weather.csv">Weather.csv</a></p>
+
+<h2>Run program</h2>
+
+<p>Put your data and the Java program under the same folder, then run</p>
+
+<p><code>
+java -cp Calculations.jar
+</code></p>
+
+<p>Then the program will output 2 files DistanceandSiniosity.csv, CompleteProcessedData.csv.
+Here are the examples of the output files: <a href="./files/range_speed/AnimalDataInitialProcessing/DistanceandSiniosity.csv">DistanceandSiniosity.csv</a> <a href="./files/range_speed/AnimalDataInitialProcessing/CompleteProcessedData.csv">CompleteProcessedData.csv</a></p>

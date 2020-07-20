@@ -1,0 +1,91 @@
+<h1>Tools for extracting grazing pattern</h1>
+
+<h2>Tool description</h2>
+
+<p>This tutorial presents how to extract presumed grazing locations using animal velocity between two consecutive points, then these extracted grazing points were used to calculate percent grazed pixels, and pixel residence time, revisit rate (visits on different days), and return interval (interval between visits when cows visited the same pixel for more than once) for each animal. </p>
+
+<p>Pixels in this project are 30m x 30m. </p>
+
+<h2>Download and install MySQL and MySQL workbench</h2>
+
+<ol>
+<li><p>Download and install MySQL from <a href="http://dev.mysql.com/downloads/mysql/">link</a></p></li>
+<li><p>Download and install MySQL workbench from <a href="http://dev.mysql.com/downloads/workbench/">link</a></p></li>
+</ol>
+
+<h2>Create a new connection to MySQL database</h2>
+
+<ol>
+<li><p>Open MySQL workbench</p>
+
+<p><a href="fig/mysql-workbench-1.png"><img src="fig/mysql-workbench-1-small.png" alt="mysql-workbench-1.png" title=""></a>
+click to zoom in</p></li>
+<li><p>Click new connection button</p>
+
+<p><a href="fig/mysql-workbench-2.png"><img src="fig/mysql-workbench-2-small.png" alt="mysql-workbench-2.png" title=""></a>
+click to zoom in</p></li>
+<li><p>Name the new connection</p>
+
+<p><a href="fig/mysql-workbench-3.png"><img src="fig/mysql-workbench-3-small.png" alt="mysql-workbench-3.png" title=""></a>
+click to zoom in</p></li>
+<li><p>Double click new connection, you will see a new window opened</p>
+
+<p><a href="fig/mysql-workbench-4.png"><img src="fig/mysql-workbench-4-small.png" alt="mysql-workbench-4.png" title=""></a>
+click to zoom in</p></li>
+</ol>
+
+<h2>Create a new database for your cow data</h2>
+
+<p>Setup password for root user (optional)
+in the new opened SQL File window, type</p>
+
+<p><code>
+SET PASSWORD FOR 'root'@'localhost' = PASSWORD('newpwd');
+</code></p>
+
+<p><a href="fig/mysql-workbench-5.png"><img src="fig/mysql-workbench-5-small.png" alt="mysql-workbench-5.png" title=""></a>
+click to zoom in</p>
+
+<p>Then click execute button to execute the script.</p>
+
+<h2>Preprocessing the data</h2>
+
+<ol>
+<li><p>Convert your GPS data into csv format and use comma as delimiter.
+In total the csv file should only have 5 columns.  They are:
+id,CowID,Date,northing,easting</p>
+
+<ul>
+<li>id is the unique record of each GPS data record. </li>
+<li>CowID is an integer.  </li>
+<li>The format of Date is yyyy-mm-dd.  </li>
+<li>Northing and easting are float numbers.</li>
+</ul>
+
+<p><a href="files/range_pixel/cordinate_points.csv">Here</a> is an example of GPS data.</p></li>
+<li><p>Convert your pixel data into csv format and use comma as delimiter.
+In total the csv file should only have 3 columns.  They are: pid, y, x</p>
+
+<ul>
+<li>id is the unique id for each pixel</li>
+<li>y,x are northing and easting coordinate respectively.  They are float numbers.</li>
+</ul>
+
+<p><a href="files/range_pixel/pixel.csv">Here</a> is an example of pixel data.</p></li>
+<li><p>Open <a href="./files/range_pixel/range_db.sql">range_db.sql</a> file from MySQL workbench.</p>
+
+<p><a href="fig/mysql-workbench-7.png"><img src="fig/mysql-workbench-7-small.png" alt="mysql-workbench-7.png" title=""></a>
+click to zoom in</p>
+
+<p>Execute range_db.sql.  A database will be created for your application.</p></li>
+</ol>
+
+<h2>Extract grazing pattern</h2>
+
+<ol>
+<li><p>Open <a href="./files/range_pixel/grazing_pattern.sql">grazing_pattern.sql</a> file from MySQL workbench. 
+Specify the path you want to export your result.  Then execute the script. </p>
+
+<p><a href="fig/mysql-workbench-8.png"><img src="fig/mysql-workbench-8-small.png" alt="mysql-workbench-8.png" title=""></a>
+click to zoom in</p></li>
+</ol>

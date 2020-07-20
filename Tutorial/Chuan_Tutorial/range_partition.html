@@ -1,0 +1,87 @@
+<h1>Tools for cow data partitioning</h1>
+
+<h2>Tool description</h2>
+
+<p>This tutorial presents how to partition a GPS data collection of cows into 3 period by utilizing MySQL database management system.</p>
+
+<p>The GPS data contains GPS coordinates for each cow over a whole day.  One day can be divided into 3 period: pre-sunrise, day time and post sunset.
+This tutorial shows the instructions of using MySQL database management software to partition the data into 3 periods: pre-sunrise, day time and post sunset.
+The results can benefit other range research that works on a certain period of the GPS data. </p>
+
+<h2>Download and install MySQL and MySQL workbench</h2>
+
+<ol>
+<li><p>Download and install MySQL from <a href="http://dev.mysql.com/downloads/mysql/">link</a></p></li>
+<li><p>Download and install MySQL workbench from <a href="http://dev.mysql.com/downloads/workbench/">link</a></p></li>
+</ol>
+
+<h2>Create a new connection to MySQL database</h2>
+
+<ol>
+<li><p>Open MySQL workbench</p>
+
+<p><a href="fig/mysql-workbench-1.png"><img src="fig/mysql-workbench-1-small.png" alt="mysql-workbench-1.png" title=""></a>
+click to zoom in</p></li>
+<li><p>Click new connection button</p>
+
+<p><a href="fig/mysql-workbench-2.png"><img src="fig/mysql-workbench-2-small.png" alt="mysql-workbench-2.png" title=""></a>
+click to zoom in</p></li>
+<li><p>Name the new connection</p>
+
+<p><a href="fig/mysql-workbench-3.png"><img src="fig/mysql-workbench-3-small.png" alt="mysql-workbench-3.png" title=""></a>
+click to zoom in</p></li>
+<li><p>Double click new connection, you will see a new window opened</p>
+
+<p><a href="fig/mysql-workbench-4.png"><img src="fig/mysql-workbench-4-small.png" alt="mysql-workbench-4.png" title=""></a>
+click to zoom in</p></li>
+</ol>
+
+<h2>Create a new database for your cow data</h2>
+
+<p>Setup password for root user (optional)
+in the new opened SQL File window, type</p>
+
+<p><code>
+SET PASSWORD FOR 'root'@'localhost' = PASSWORD('newpwd');
+</code></p>
+
+<p><a href="fig/mysql-workbench-5.png"><img src="fig/mysql-workbench-5-small.png" alt="mysql-workbench-5.png" title=""></a>
+click to zoom in</p>
+
+<p>Then click execute button to execute the script.</p>
+
+<h2>Preprocessing the data</h2>
+
+<ol>
+<li><p>Convert your GPS data into csv format and use comma as delimiter.
+In total the csv file should only have 5 columns.  They are:
+CowID,Date,Time,northing,easting</p>
+
+<ul>
+<li>CowID is an integer.  </li>
+<li>The format of Date is yyyy-mm-dd.  </li>
+<li>The format of Time is hh-mm-dd.</li>
+<li>Northing and easting are float numbers.</li>
+</ul>
+
+<p><a href="files/range_partition/2007Data.csv">Here</a> is an example of GPS data.</p></li>
+<li><p>Convert your sunset/sunrise data into csv format and use comma as delimiter.
+In total the csv file should only have 3 columns.  They are: Date,Sunrise,Sunset</p>
+
+<ul>
+<li>The format of Date is yyyy-mm-dd.  </li>
+<li>The format of sunrise and sunset is hh-mm-dd.</li>
+</ul>
+
+<p><a href="files/range_partition/2007Time.csv">Here</a> is an example of time data.</p></li>
+<li><p>Open <a href="./files/range_partition/cowcalf.sql">cowcalf.sql</a> file from MySQL workbench.</p>
+
+<p><a href="fig/mysql-workbench-6.png"><img src="fig/mysql-workbench-6-small.png" alt="mysql-workbench-6.png" title=""></a>
+click to zoom in</p>
+
+<ol>
+<li>Specify the path of input GPS data and sunset/sunrise data.</li>
+<li>Specify the path of output data: pre.csv, day.csv, post.csv.</li>
+<li>Execute cowcalf.sql.  The GPS data will be partitioned into 3 period and written to the output data file specified by step 2.</li>
+</ol></li>
+</ol>
