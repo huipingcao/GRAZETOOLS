@@ -21,7 +21,16 @@ Summary of the logics:
 -------------------------------------
 1. **range_speed**. 
 	1. All the GPS data are read from the data file, and are stored and sorted by cowid, data, time.
-	2. The program is coded by *Aditay* calculates the distance traveled, path sinuosity, woodland preference index. The logic of this part is **hard to follow**. Time is needed to understand it. 
+	2. The program is coded by *Aditay* calculates the distance traveled, path sinuosity, woodland preference index. 
+	    1. The siniosity is the ratio between the distance from the first gps record to the last records and the 
+	    cumulative distance of the whole day/pre-day/day-time/post-day's GPS records.  
+	    ![Calculation of the siniosity](figs/formula_siniosity.png), where $g_i$ is one GPS record at time i and t is 
+	    the total number of GPS records of the whole day/pre-day/day-time/post-day.
+	    2. The woodland visitation is the percentage of the number of time the cow visied the woodland during the 
+	    whole day/pre-day/day-time/post-day.
+	    3. The weather information is added as well. 
+	    4. The outputs are *DistanceandSiniosity.csv* and *CompleteProcessedData.csv* (with speed and weather 
+	    information).;
 	3. The code of the convex hull is calculate following [Andrew's monotone chain convex hull algorithm](https://en.wikibooks.org/wiki/Algorithm_Implementation/Geometry/Convex_hull/Monotone_chain). The function accept the GPS locations of one cow, the vertices of the convex hull are returned. The complexity for calculation on two-dimensional space is O(nlog(n)).
 	4. The returned points are used to calculate the area of convex hull by using following formula.
 	![Calculation of the area of MCP](figs/formula_MCP_Area.png)

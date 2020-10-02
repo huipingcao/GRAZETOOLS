@@ -13,8 +13,8 @@ public class newAminalFunctions {
 
     String dataFile = "";
     String TimeFile = "";
-    int rest_speed = 5;
-    int grazing_speed = 20;
+    double rest_speed = 5;
+    double grazing_speed = 20;
 //    int traveling_speed = 50;
 
     HashMap<String, HashMap<String, ArrayList<Double[]>>> pointsMap = new HashMap<>(); //cowid -> <date, List of points>
@@ -37,7 +37,7 @@ public class newAminalFunctions {
     private int lag = 5;
 
 
-    public newAminalFunctions(String fileDataPosition, String fileTime, int rest_speed, int grazing_speed, int threshold, int lag) {
+    public newAminalFunctions(String fileDataPosition, String fileTime, double rest_speed, double grazing_speed, double threshold, int lag) {
         this.dataFile = fileDataPosition;
         this.TimeFile = fileTime;
         this.rest_speed = rest_speed;
@@ -120,7 +120,7 @@ public class newAminalFunctions {
                         this.points_time_Map.put(c_cowid, d);
                     }
 
-
+//                    System.out.println(c_date);
                     String sun_rise = timeObj.get(c_date).getKey();
                     String sun_set = timeObj.get(c_date).getValue();
                     int ptype = getPartitionType(c_time, sun_rise, sun_set);
@@ -187,12 +187,10 @@ public class newAminalFunctions {
                     }
 
                 } else {
-//                    System.out.println(linenumber + ":" + line);
+                    System.out.println(linenumber + ":" + line);
                 }
             }
             br.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -233,15 +231,27 @@ public class newAminalFunctions {
 
 
             List<String> sorted_cow_List = new ArrayList(this.cowList);
-            Collections.sort(sorted_cow_List, new comparatorStr());
+            Collections.sort(sorted_cow_List, new comparatorStrCowID());
             List<String> sorted_date_List = new ArrayList(this.dateList);
             Collections.sort(sorted_date_List, new comparatorDate());
 
             for (String cowid : sorted_cow_List) {
                 for (String date : sorted_date_List) {
-                    HashSet<Pair<Double, Double>> pre_points = this.pre_pointsMap.get(cowid).get(date);
-                    HashSet<Pair<Double, Double>> day_points = this.day_pointsMap.get(cowid).get(date);
-                    HashSet<Pair<Double, Double>> post_points = this.post_pointsMap.get(cowid).get(date);
+//                    System.out.println(cowid+" "+date+" "+(this.pre_pointsMap.get(cowid)==null)+" "+(this.day_pointsMap.get(cowid)==null)+" "+(this.post_pointsMap.get(cowid)==null));
+                    HashSet<Pair<Double, Double>> pre_points=new HashSet<>();
+                    HashSet<Pair<Double, Double>> day_points=new HashSet<>();
+                    HashSet<Pair<Double, Double>> post_points=new HashSet<>();
+
+                    if(this.pre_pointsMap.get(cowid)!=null){
+                        pre_points = this.pre_pointsMap.get(cowid).get(date);
+                    }
+                    if(this.day_pointsMap.get(cowid)!=null){
+                        day_points = this.day_pointsMap.get(cowid).get(date);
+                    }
+                    if(this.post_pointsMap.get(cowid)!=null){
+                        post_points = this.post_pointsMap.get(cowid).get(date);
+                    }
+
                     HashSet<Pair<Double, Double>> allDay_points = new HashSet<>();
 
                     if (pre_points == null && day_points == null && post_points == null) {
@@ -370,7 +380,7 @@ public class newAminalFunctions {
                 return 1;
             }
         } catch (ParseException e) {
-            System.out.println(cur_date + " " + Sunrise + " " + Sunset);
+            System.out.println(cur_date + "|" + Sunrise + "|" + Sunset);
             System.out.println("There is something wrong with your time formation, please check it 3");
             System.exit(0);
         }
@@ -449,7 +459,7 @@ public class newAminalFunctions {
         }
 
 
-        TreeMap<String, HashSet<Pair<String, double[]>>> s_by_cowId = new TreeMap<>(new SortByCowid());
+        TreeMap<String, HashSet<Pair<String, double[]>>> s_by_cowId = new TreeMap<>(new comparatorStrCowID());
         s_by_cowId.putAll(this.points_time_Map);
 
         for (String cow_id : s_by_cowId.keySet()) {
@@ -613,7 +623,7 @@ public class newAminalFunctions {
         }
 
 
-        TreeMap<String, HashSet<Pair<String, double[]>>> s_by_cowId = new TreeMap<>(new SortByCowid());
+        TreeMap<String, HashSet<Pair<String, double[]>>> s_by_cowId = new TreeMap<>(new comparatorStrCowID());
         s_by_cowId.putAll(this.points_time_Map);
 
         for (String e : s_by_cowId.keySet()) {

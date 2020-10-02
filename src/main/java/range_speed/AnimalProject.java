@@ -9,15 +9,15 @@ import java.util.StringTokenizer;
 
 
 public class AnimalProject {
-//    private final static String outputDistSino = "data/speed/DistanceandSiniosity.csv";
-//    private final static String outputAll = "data/speed/CompleteProcessedData.csv";
-//    private static String fileDataPosition = "data/speed/DataWithPosition.csv";
-//    private static String fileWeather = "data/speed/Weather.csv";
-//    private static String fileTime = "data/speed/Time.csv";
+//    private final static String outputDistSino = "data/speed/Matt_Data/DistanceandSiniosity.csv";
+//    private final static String outputAll = "data/speed/Matt_Data/CompleteProcessedData.csv";
+//    private static String fileDataPosition = "data/speed/Matt_Data/DataWithPosition.csv";
+//    private static String fileWeather = "data/speed/Matt_Data/Weather.csv";
+//    private static String fileTime = "data/speed/Matt_Data/Time.csv";
 
-    private static int rest_speed = 5;
-    private static int grazing_speed = 15;
-    private static int threshold = 4;
+    private static double rest_speed = 5;
+    private static double grazing_speed = 15;
+    private static double threshold = 4;
     private static int lag = 5;
 
 
@@ -53,26 +53,26 @@ public class AnimalProject {
         System.out.println("Enter upper bound of the speed (m/min) of the rest movement (Default 5 m/min): ");
         str = in.readLine();
         if (str.trim().length() > 0) {
-            rest_speed = Integer.valueOf(str);
+            rest_speed = Double.parseDouble(str);
         }
 
         System.out.println("Enter upper bound of the speed (m/min) of the grazing movement (Default 15 m/min): ");
         str = in.readLine();
         if (str.trim().length() > 0) {
-            grazing_speed = Integer.valueOf(str);
+            grazing_speed = Double.parseDouble(str);
         }
 
 
         System.out.println("Enter the threshold of the speed (m/min) to determine whether one GPS record is active or not  (Default: 4 m/min):");
         str = in.readLine();
         if (str.trim().length() > 0) {
-            threshold = Integer.valueOf(str);
+            threshold = Double.parseDouble(str);
         }
 
         System.out.println("Enter number of the lag (number of GPS records need to be considered in previous and following, default is 5):");
         str = in.readLine();
         if (str.trim().length() > 0) {
-            lag = Integer.valueOf(str);
+            lag = Integer.parseInt(str);
         }
 
 

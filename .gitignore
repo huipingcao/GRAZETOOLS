@@ -4,3 +4,7 @@ target
 ./*.csv
 .idea
 !data/*
+data/Dani_Data
+data/Matt_Data
+data/output
+*.csv

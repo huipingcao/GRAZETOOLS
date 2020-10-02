@@ -46,7 +46,7 @@
                     <!-- MainClass in mainfest make a executable jar -->
                     <archive>
                         <manifest>
-                            <mainClass>range_pixel.range_pixel</mainClass>
+                            <mainClass>range_speed.AnimalProject</mainClass>
                         </manifest>
                     </archive>
 
