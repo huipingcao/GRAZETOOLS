@@ -4,6 +4,10 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+/**
+ * Helper program for evaluating which period a certain time belongs to
+ *
+ */
 public class TimeCompare {
     public static void main(String args[]) throws ParseException {
         TimeCompare c = new TimeCompare();

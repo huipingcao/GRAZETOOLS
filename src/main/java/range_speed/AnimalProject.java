@@ -8,6 +8,13 @@ import java.util.Date;
 import java.util.StringTokenizer;
 
 
+/**
+ * Given the GPS records, time, and weather information, The program calculates the distance traveled, path sinuosity, woodland preference index, convex hull points, convex hull area, and the time slots of the activities for each cow.
+ * Input: position file name, position file name, time file name, the upper bound of the speed (m/min) of the rest movement, the upper bound of the speed (m/min) of the grazing movement, the threshold of the speed (m/min), the number of the lag 
+ * Output: DistanceandSiniosity.csv(the distance traveled, path sinuosity, average speed, and woodland preference index (the percentage of a cow that visited woodland among whole GPS records) of a cow in the whole day, pre-day, day-time and post-day)
+ * CompleteProcessedData.csv (Besides the results in the DistanceandSiniosity.csv, the weather data are extracted from weather.csv and appended to the end of the file.)
+ * 
+ */
 public class AnimalProject {
 //    private final static String outputDistSino = "data/speed/Matt_Data/DistanceandSiniosity.csv";
 //    private final static String outputAll = "data/speed/Matt_Data/CompleteProcessedData.csv";
@@ -15,10 +22,10 @@ public class AnimalProject {
 //    private static String fileWeather = "data/speed/Matt_Data/Weather.csv";
 //    private static String fileTime = "data/speed/Matt_Data/Time.csv";
 
-    private static double rest_speed = 5;
-    private static double grazing_speed = 15;
-    private static double threshold = 4;
-    private static int lag = 5;
+    private static double rest_speed = 5; //upper bound of the speed (m/min) of the rest movement 
+    private static double grazing_speed = 15;//upper bound of the speed (m/min) of the grazing movement 
+    private static double threshold = 4; //determine whether one GPS record is active or not
+    private static int lag = 5; //number of GPS records need to be considered in previous and following
 
 
     private final static String outputDistSino = "DistanceandSiniosity.csv";
@@ -27,6 +34,10 @@ public class AnimalProject {
     private static String fileWeather = "Weather.csv";
     private static String fileTime = "Time.csv";
 
+    /**
+     * Get inputs from user
+     * @throws IOException
+     */
     private static void fileNameProcess() throws IOException {
 
         InputStreamReader inp = new InputStreamReader(System.in);
@@ -62,7 +73,6 @@ public class AnimalProject {
             grazing_speed = Double.parseDouble(str);
         }
 
-
         System.out.println("Enter the threshold of the speed (m/min) to determine whether one GPS record is active or not  (Default: 4 m/min):");
         str = in.readLine();
         if (str.trim().length() > 0) {
@@ -92,6 +102,11 @@ public class AnimalProject {
 
     }
 
+    /**
+     * Write title for DistanceandSiniosity.csv file
+     * @param writerDistSino
+     * @throws IOException
+     */
     private static void writeHeaderDistSino(FileWriter writerDistSino) throws IOException {
         writerDistSino.append("Trt");
         writerDistSino.append(',');
@@ -135,6 +150,11 @@ public class AnimalProject {
         writerDistSino.append('\n');
     }
 
+    /**
+     * Write title for CompleteProcessedData.csv file
+     * @param writerAll
+     * @throws IOException
+     */
     private static void writeHeaderAll(FileWriter writerAll) throws IOException {
         writerAll.append("Trt");
         writerAll.append(',');
@@ -190,6 +210,12 @@ public class AnimalProject {
         writerAll.append('\n');
     }
 
+    /**
+     * 
+     * @param writerDistSino
+     * @param PositionData
+     * @throws IOException
+     */
     private static void writeDistSino(FileWriter writerDistSino, PositionData PositionData) throws IOException {
         writerDistSino.append(PositionData.Treatment);
         writerDistSino.append(',');
@@ -258,6 +284,11 @@ public class AnimalProject {
         writerDistSino.append(String.valueOf(PositionData.PostNightWoodLandArea));
     }
 
+    /**
+     * @param writerAll
+     * @param PositionData
+     * @throws IOException
+     */
     private static void writerall(FileWriter writerAll, PositionData PositionData) throws IOException {
         writerAll.append(PositionData.Treatment);
         writerAll.append(',');
@@ -324,6 +355,13 @@ public class AnimalProject {
         writerAll.append(String.valueOf(PositionData.PostNightWoodLandArea));
     }
 
+    /**
+     * Load weather data and write the data to complete Processed file 
+     * @param PositionData
+     * @param lineNumber
+     * @param writerAll
+     * @throws IOException
+     */
     private static void ReadWeather(PositionData PositionData, int lineNumber, FileWriter writerAll) throws IOException {
         int flag4 = 0, tokenNumber;
         String weatherline = "";
@@ -361,6 +399,16 @@ public class AnimalProject {
         brWeather.close();
     }
 
+    /**
+     * Load time data and divide data into 3 time periods
+     * Stores three time periods woodland count into PositionData object
+     * Stores day counts into PositionData object
+     * @param PositionData
+     * @param lineNumber
+     * @param writerAll
+     * @throws IOException
+     * @throws ParseException
+     */
     private static void ReadTime(PositionData PositionData, int lineNumber, FileWriter writerAll) throws IOException, ParseException {
         DateFormat formatter1;
         formatter1 = new SimpleDateFormat("hh:mm:ss a");
@@ -404,6 +452,10 @@ public class AnimalProject {
         brTime.close();
     }
 
+    /**
+     * Calculate path sinuosity(The siniosity is the ratio between the distance from the first gps record to the last records and the cumulative distance of the whole day/pre-day/day-time/post-day's GPS records) by using code of Aditay
+     * @param PositionData
+     */
     private static void sinosityandwoodlandcalculations(PositionData PositionData) {
         PositionData.tot_sin = Math.sqrt(((PositionData.p2 - PositionData.p1) * (PositionData.p2 - PositionData.p1)) + ((PositionData.n2 - PositionData.n1) * (PositionData.n2 - PositionData.n1)));
         PositionData.tot_sin /= PositionData.dist;
@@ -419,6 +471,10 @@ public class AnimalProject {
         PositionData.PostNightWoodLandArea = (PositionData.PostNightWoodLandCount / PositionData.PostNightCount) * 100;
     }
 
+    /**
+     * Calculate the distance traveled
+     * @param PositionData
+     */
     private static void DistanceCalculations(PositionData PositionData) {
         //Calculating the distances
 
@@ -477,6 +533,10 @@ public class AnimalProject {
         }
     }
 
+    /**
+     * Initialize all parameters 
+     * @param PositionData
+     */
     private static void SwappingandloopIntialization(PositionData PositionData) {
         PositionData.TotalWoodLandCount = 0;
         PositionData.PostNightWoodLandCount = PositionData.PreNightWoodLandCount = PositionData.DayWoodLandCount = 0;
@@ -500,6 +560,12 @@ public class AnimalProject {
         PositionData.DayTime = PositionData.Day_time = PositionData.Pre_time = PositionData.Post_time = 0;
     }
 
+    /**
+     * Main program
+     * @param args
+     * @throws IOException
+     * @throws ParseException
+     */
     public static void main(String[] args) throws IOException, ParseException {
         String storagestring = null;
         int lineNumber = 0, tokenNumber = 0, flag = 0, flag1 = 0;

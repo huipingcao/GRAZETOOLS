@@ -9,12 +9,19 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+/**
+ * Input: GPS and Time data files
+ * Output: MCP_Results.csv(Calculates convex hull vertices of cow movements on each day, pre-day, day-time and post-day)  
+ * MCP_Area_Results.csv(Calculates convex hull area of cow movements on each day, pre-day, day-time and post-day)
+ * movement_partition.csv(calculates cows movement partition)
+ * time_slots.csv (the time slots of the activities for each cow in each day
+ */
 public class newAminalFunctions {
 
     String dataFile = "";
     String TimeFile = "";
-    double rest_speed = 5;
-    double grazing_speed = 20;
+    double rest_speed = 5;  //upper bound of the speed (m/min) of the rest movement
+    double grazing_speed = 15;  //upper bound of the speed (m/min) of the grazing movement 
 //    int traveling_speed = 50;
 
     HashMap<String, HashMap<String, ArrayList<Double[]>>> pointsMap = new HashMap<>(); //cowid -> <date, List of points>
@@ -33,8 +40,8 @@ public class newAminalFunctions {
 
     HashMap<String, Pair<String, String>> timeObj = new HashMap<>(); //data -> <Sunrise and Sunset>
     ConvexHull ch = new ConvexHull();
-    private double threshold = 4;
-    private int lag = 5;
+    private double threshold = 4; //determine whether one GPS record is active or not 
+    private int lag = 5; //number of GPS records need to be considered in previous and following
 
 
     public newAminalFunctions(String fileDataPosition, String fileTime, double rest_speed, double grazing_speed, double threshold, int lag) {
@@ -53,6 +60,9 @@ public class newAminalFunctions {
 
     }
 
+    /**
+     * Read time data and store info in this.timeObj(data -> <Sunrise and Sunset>)
+     */
     private void readTime() {
         StringBuffer sb = new StringBuffer();
         BufferedReader br = null;
@@ -82,6 +92,10 @@ public class newAminalFunctions {
 //        System.out.println("--------------------------------------------------");
     }
 
+    /**
+     * Read GPS data and store info in this.cowList and this.dateList
+     * It uses info of timeObj and divides data into three time periods(stores in pre_pointsMap, day_pointsMap and post_pointsMap)
+     */
     private void readGPSData() {
         BufferedReader br = null;
         int linenumber = 0;
@@ -199,6 +213,11 @@ public class newAminalFunctions {
     }
 
 
+    /**
+     * Calculates convex hull vertices of cow movements on each day, pre-day, day-time and post-day and write data into MCP_Results.csv, which are sorted by Cow_id, then by day time partition, Date
+     * Calculates convex hull area of cow movements on each day, pre-day, day-time and post-day and write info into MCP_Area_Results.csv, which are sorted by Cow_id, then by Date
+     * Algorithm: Andrew's monotone chain convex hull algorithm(The function accept the GPS locations of one cow, the vertices of the convex hull are returned. The complexity for calculation on two-dimensional space is O(nlog(n)))
+     */
     public void convexHull() {
 
         BufferedWriter area_bw = null;
@@ -388,6 +407,12 @@ public class newAminalFunctions {
         return -1;
     }
 
+    /**
+     * Find convex hull points by given GPS data
+     * Algorithm: It calls ConvexHull.java, which uses Andrew's monotone chain convex hull algorithm
+     * @param points
+     * @return 
+     */
     public Point[] FindConvexHull(HashSet<Pair<Double, Double>> points) {
         Point[] p = new Point[points.size()];
         int i = 0;
@@ -413,6 +438,12 @@ public class newAminalFunctions {
         return hull;
     }
 
+    /**
+     * Calculates convex hull area of cow movements by given convex hull points
+     * Algorithm: Polygon Area
+     * @param pin_s 
+     * @return
+     */
     public double convex_area(Point[] pin_s) {
         double area = 0;
         for (int i = 0; i < pin_s.length; i++) {
@@ -432,6 +463,9 @@ public class newAminalFunctions {
         return area;
     }
 
+    /**
+     * Call movementParitionForCow() to calculates cows movement partition, represented as percentage, according to the user inputted upper bound of the rest movement speed and the grazing movement speed. And all data are partitioned into three time periods (pre-day, day-time and post-day). And write data into movement_partition.csv, sorted by cowID
+     */
     public void movementPartition() {
         BufferedWriter bw = null;
         FileWriter fw = null;
@@ -471,6 +505,11 @@ public class newAminalFunctions {
     }
 
 
+    /**
+     * Get movement states by given speed
+     * @param speed
+     * @return 0-rest 1-grazing 2-running
+     */
     public int movement_type(double speed) {
         if (speed <= this.rest_speed) {
             return 0;
@@ -481,6 +520,10 @@ public class newAminalFunctions {
         }
     }
 
+    /**
+     * Counts the percentage of each cow that was resting, walking and running during the whole day, the pre-day, the daytime, and the post-day according given time date.
+     * @param cowid
+     */
     public void movementParitionForCow(String cowid) {
 
         BufferedWriter area_bw = null;
@@ -594,6 +637,9 @@ public class newAminalFunctions {
         }
     }
 
+    /**
+     * Identifies the activity time slots of the each cow in each day and write data into time_slots.csv
+     */
     public void time_slot() {
 
         //delete before write the file
@@ -635,6 +681,10 @@ public class newAminalFunctions {
     }
 
 
+    /**
+     * Find time series of cows movement, which uses treeSet structure to store the ordered time list
+     * @param cow_id
+     */
     public void timeSeriesForCow(String cow_id) {
 
         BufferedWriter bw = null;
@@ -770,6 +820,13 @@ public class newAminalFunctions {
 
     }
 
+    /**
+     * Find cows movement time slots by given speedList, threshold and lag
+     * @param speedList - time --> speed
+     * @param threshold - to determine whether one GPS record is active or not
+     * @param lag - number of GPS records need to be considered in previous and following
+     * @return a double array of time slots  
+     */
     private double[] findTimeSlot(ArrayList<Pair<String, Double>> speedList, double threshold, int lag) {
 
         int n = speedList.size();
@@ -802,6 +859,12 @@ public class newAminalFunctions {
 
     }
 
+    /**
+     * Determine whether two time slots are equal or not
+     * @param refinded_s_1
+     * @param refinded_s_2
+     * @return boolean value
+     */
     private boolean isEquals(double[] refinded_s_1, double[] refinded_s_2) {
 
         boolean flag = true;
@@ -816,6 +879,12 @@ public class newAminalFunctions {
         return flag;
     }
 
+    /**
+     * Get refined signal array by given lag
+     * @param signals
+     * @param lag
+     * @return
+     */
     private double[] refine_signal(double[] signals, int lag) {
         int n = signals.length;
         double[] refined_signals = new double[n];
@@ -832,6 +901,13 @@ public class newAminalFunctions {
         return refined_signals;
     }
 
+    /**
+     * Determine whether the cow has activity in previous by given signal and lag
+     * @param index
+     * @param signals
+     * @param lag
+     * @return boolean value
+     */
     private boolean noActivityInPrevious(int index, double[] signals, int lag) {
         boolean flag = true;
         int l = 0;
@@ -850,6 +926,13 @@ public class newAminalFunctions {
         return flag;
     }
 
+    /**
+     * Determine whether the cow has activity in fellow by given signal and lag
+     * @param index
+     * @param signals
+     * @param lag
+     * @return boolean value
+     */
     private boolean noActivityInFellow(int index, double[] signals, int lag) {
         boolean flag = true;
         int u = signals.length;

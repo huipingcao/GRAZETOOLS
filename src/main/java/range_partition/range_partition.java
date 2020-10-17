@@ -10,6 +10,11 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 
+/**
+ * It partitions a GPS data collection of cows into three periods (pre-day, daytime, post-day) based on a given time file
+ * Input: files name of GPS and time data
+ * Output: three time partition files 
+ */
 public class range_partition {
     String basePath = "data/partition/";
 //    String basePath = "";
@@ -23,7 +28,13 @@ public class range_partition {
 
     File preF, dayF, postF;
     long pre_count, day_count, post_count;
+    
+    
 
+    /**
+     * read GPS and time data, and write GPS data into three time partition files
+     * @param args
+     */
     public static void main(String args[]) {
         range_partition rp = new range_partition();
         rp.cleanFiles();
@@ -31,7 +42,12 @@ public class range_partition {
         rp.readTimeFile();
         rp.readGPSData();
     }
+    
+    
 
+    /**
+     * Create or overwrite three time partition files(pre-day, daytime, post-day) and write the title
+     */
     private void cleanFiles() {
         preF = new File(this.prePath);
         dayF = new File(this.dayPath);
@@ -46,7 +62,6 @@ public class range_partition {
         if (postF.exists()) {
             postF.delete();
         }
-
 
         //write the title
         try (FileWriter fw = new FileWriter(preF, true);
@@ -74,7 +89,6 @@ public class range_partition {
             e.printStackTrace();
         }
 
-
         try (FileWriter fw = new FileWriter(postF, true);
              BufferedWriter bw = new BufferedWriter(fw);
              PrintWriter out = new PrintWriter(bw)) {
@@ -89,6 +103,11 @@ public class range_partition {
         }
     }
 
+    
+    
+    /**
+     * Read GPS data file and write into three time partition files according to the sunrise and sunset time of a certain day, which stored in a time object
+     */
     private void readGPSData() {
         TimeCompare t = new TimeCompare();
         StringBuffer sb = new StringBuffer();
@@ -131,6 +150,13 @@ public class range_partition {
         System.out.println("There are "+this.post_count+" GPS records were wrote to post.csv");
     }
 
+    
+    
+    /**
+     * Write GPS data string into belonging time partition file according to the pre-evaluated type 
+     * @param type - 0(time is pre-day) 1(time is daytime) 2(time is post-day)
+     * @param line - GPS data string
+     */
     private void writeToFile(int type, String line) {
         String fileName = "";
         switch (type) {
@@ -160,8 +186,12 @@ public class range_partition {
             e.printStackTrace();
         }
     }
+    
 
 
+    /**
+     * Helper function for reading GPS and time file name from input
+     */
     private void readFilenName() {
         InputStreamReader inp = new InputStreamReader(System.in);
         BufferedReader in = new BufferedReader(inp);
@@ -185,6 +215,11 @@ public class range_partition {
         System.out.println("--------------------------------------------------");
     }
 
+    
+    
+    /**
+     * Read time file into a time object
+     */
     public void readTimeFile() {
         StringBuffer sb = new StringBuffer();
         BufferedReader br = null;
