@@ -1,0 +1,12 @@
+
+
+
+10/17/2020: 
+Huiying made several changes to the GitHub repository today. However, her commit comments are not informative. 
+The major changes she made are 
+(1) update two tutorial files (on tutorial_range_partition_v2.docx, tutorial_range_speed_v2.docx)
+(2) Added google doc commands to the java code, but did not make ANY CHANGE to the code
+(3) Uploaded the java doc to the doc folder. 
+
+
+ 
