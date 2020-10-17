@@ -1,0 +1,7 @@
+Put example input csv files to input folder
+Put example output csv files to output folder
+Put the commands to run here
+
+#command to generate tthe jar file
+
+#command to run the code
