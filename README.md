@@ -15,7 +15,14 @@ execution of the code and the input files:
 	- If you are coding by using IDE, put all the input files under the root folder of the project. 
 	- The responding input files can be found found in the [data](data) folder. 
 - Details usages of the **range_pixel** can be found in the [instruction](Tutorial/instructions-v2.pdf).
-
+- Compile the executable Jar Files:
+	- change the line `<mainClass>*****</mainClass>` to point the main function as desire (e.g. `speed_pixel.speed_pixel`) in the file 'pom.xml'.
+	- compile with the `mvn` command, `mvn clean package`. 
+	- rename the jar file, `~/target/.*-with-dependencies.jar`.
+	- The corresponding mapping from the main function to the jar file could be 
+		- `range_pixel.range_pixel` >>> GRAZEPIX
+		- `range_speed.AnimalProject` >>> GRAZEACT
+		- `range_partition.range_partition` >>> GRAZEPartitio
 
 Summary of the logics:
 -------------------------------------
@@ -43,3 +50,13 @@ Summary of the logics:
 	1. The pixel file contains the geographic information of the pasture. The parameter `meters of the range` controls the size of the each pixel square.  
 	2. The velocity is computed by two consecutive GPS records as well. If the speed of the cow is between given thresholds `min_speed` and `max_speed`, we think the cow revisited back to one pixel. Otherwise, we think the cow just ran through or rested one pixel.
 	3. Details usages can be found in the [instruction](Tutorial/instructions-v2.pdf).
+	
+Citation:
+---------------------------------------
+<pre>@inproceedings{gong2020grazetools,
+title={GRAZETOOLS: A Set of Tools for Analyzing Livestock Behavior Using GPS data},
+author={Gong, Qixu and Cao, Huiping and Cibils, Andres and Nyamuryekung'e, Shelemia and McIntosh, Matthew and Continanza, Fatima},
+booktitle={AGU Fall Meeting 2020},
+year={2020},
+organization={AGU}
+}</pre>
