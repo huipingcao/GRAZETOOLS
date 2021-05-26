@@ -47,9 +47,9 @@
                     <archive>
                         <manifest>
                             <mainClass>range_speed.AnimalProject</mainClass>
+<!--                            <mainClass>range_pixel.range_pixel</mainClass>-->
                         </manifest>
                     </archive>
-
                 </configuration>
                 <executions>
                     <execution>

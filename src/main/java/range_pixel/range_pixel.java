@@ -21,13 +21,15 @@ import java.util.*;
  * result4.csv - The number of times and time spent of each cow in each pixel
  * result5.csv - The number of intervals of each cow in each pixel
  * result6.csv - The number of pixels that is visited by cows with different counts in one interval
- *
  */
 public class range_pixel {
-	
-    String pixelPath = "pixel.csv";
+
     //    String GPSData = "data/pixel/sample_gps.csv";
-    String GPSData = "coordinate_points.csv";
+    String pixelPath = "pixel.csv";
+    String GPSData = "coordinate_pointscsv";
+
+//    String pixelPath = "data/pixel/pixel.csv";
+//    String GPSData = "data/pixel/coordinate_points.csv";
 
 
     HashMap<Long, Pair<Double, Double>> pixelList = new HashMap<Long, Pair<Double, Double>>(); //pixel_id -> <northing,easting>
@@ -51,7 +53,6 @@ public class range_pixel {
     SimpleDateFormat date_formatter = new SimpleDateFormat("yyyy-MM-dd");
 
 
-    
     public static void main(String args[]) {
         range_pixel rp = new range_pixel();
         rp.readTheFileName();
@@ -73,9 +74,8 @@ public class range_pixel {
     }
 
 
-    
     /**
-     * Get file name of coordination data, file name of pixel data, min speed and max speed, visit interval, interval of the sub table from user 
+     * Get file name of coordination data, file name of pixel data, min speed and max speed, visit interval, interval of the sub table from user
      */
     private void readTheFileName() {
         InputStreamReader inp = new InputStreamReader(System.in);
@@ -130,8 +130,7 @@ public class range_pixel {
 
     }
 
-    
-    
+
     /**
      * Divide data into years
      */
@@ -178,15 +177,13 @@ public class range_pixel {
         }
 //        System.out.println(yearInfos.size());
     }
-    
-    
+
 
     /**
      * Calculate and write the statistics of the number of pixels that is visited by cows with different counts(e.g. how many pixels are visited only once/twice/three times, and etc) in one interval into result6.csv
-     * pixel_visit_summary - this pixel visits by cows statistics 
+     * pixel_visit_summary - this pixel visits by cows statistics
      * Logic: pixel_visit_summary = <cow_id, visit_info>
      * this.result cowID—> Hashmap<pixel_id,date list that the cow was in the pixel>
-     * 
      */
     private void printResult6() {
         File file = new File("result6.csv");
@@ -307,9 +304,7 @@ public class range_pixel {
 
     }
 
-    
-    
-    
+
     /**
      * Calculate and write the statistics of the number of intervals of each cow in each pixel. It consist of one master table and several sub-tables into result5.csv file.
      * Each row is the number of visited intervals of each cows.
@@ -362,7 +357,7 @@ public class range_pixel {
 
     }
 
-    
+
     /**
      * Generate sub-tables of result5. The each sub-table is shows the statistic over the date in one sub-table interval which is controlled by the parameter - interval of the sub table.
      */
@@ -417,7 +412,6 @@ public class range_pixel {
         }
     }
 
-    
 
     /**
      * Calculate and write the statistics of the number of times and time spent of each cow in each pixel into result4.csv file
@@ -455,8 +449,8 @@ public class range_pixel {
         }
 
     }
-    
-    
+
+
     /**
      * Calculate and write the statistics that for each year, each cow and each pixel calculate the average of the number of days this cow visit back to this pixel into result3.csv file
      */
@@ -523,7 +517,6 @@ public class range_pixel {
 
     }
 
-    
 
     /**
      * Calculate and write the statistics that for each year, each cow and each pixel calculate how many days this cow visit back to this pixel into result2.csv file
@@ -570,10 +563,10 @@ public class range_pixel {
             e.printStackTrace();
         }
     }
-    
+
 
     /**
-     * Calculate and write the statistics. For each cow and each pixel calculate how many intervals this cow visit back to this pixel into result1. csv file. 
+     * Calculate and write the statistics. For each cow and each pixel calculate how many intervals this cow visit back to this pixel into result1. csv file.
      * The interval is controlled by the parameter visit interval.(No matter how many times this cow visited this pixel within the interval days, only counts 1)
      */
     private void printResult1() {
@@ -613,10 +606,11 @@ public class range_pixel {
         }
     }
 
-    
+
     /**
      * Get how many intervals in cows visit records
-     * @param datelist 
+     *
+     * @param datelist
      * @return the size
      */
     private int getSizeInDaysInterval(HashSet<String> datelist) {
@@ -639,9 +633,10 @@ public class range_pixel {
         return visited_interval_list.size();
     }
 
-    
+
     /**
      * Get Get how many intervals in sub-tables of cows visit records
+     *
      * @param datelist
      * @param daysintervalobjList
      * @return
@@ -755,6 +750,7 @@ public class range_pixel {
 
     /**
      * print Visit Date With CowID and Pid
+     *
      * @param cowid
      * @param pid
      */
@@ -770,6 +766,7 @@ public class range_pixel {
 
     /**
      * print Pixel List With CowID
+     *
      * @param cowid
      */
     private void printPixelListWihtCowID(String cowid) {
@@ -835,6 +832,7 @@ public class range_pixel {
             System.err.println("Can not open the Pixel file, please check it. ");
         }
         System.out.println("read the pixel file done" + "   " + linenumber);
+//        System.exit(0);
 //        System.out.println(this.pixelList.size());
 //        System.out.println(this.pixel_veg_class.size());
 
@@ -889,10 +887,12 @@ public class range_pixel {
             System.out.println("There is the some issue with the format of the date or time in the coordinate file. ");
             e.printStackTrace();
         }
+//        System.exit(0);
     }
 
     /**
      * Helper function for building the interval mapping according to the minimum date and the maximum date in the visit records
+     *
      * @param min_d
      * @param max_d
      */
@@ -1020,7 +1020,10 @@ public class range_pixel {
             pbar.setExtraMessage("Reading.....");
             pbar.stepBy(0);
 
+
             br = new BufferedReader(new FileReader(this.GPSData));
+
+
             String line = null;
             while ((line = br.readLine()) != null) {
                 linenumber++;
@@ -1036,15 +1039,26 @@ public class range_pixel {
                 }
 
 
+//                System.out.println(line);
+//                System.out.println(line.split(",")[0]);
+//                System.out.println(line.split(",")[1]);
+//                System.out.println(line.split(",")[2]);
+//                System.out.println(line.split(",")[3]);
+//                System.out.println(line.split(",")[4]);
+//                System.out.println(line.split(",")[5]);
+//                System.out.println(line.split(",").length);
+
                 String[] infos = line.split(",");
+//                System.out.println(infos.length);
+
                 String gpsId = infos[0];
                 String cowId = infos[1];
                 String date = infos[2];
                 String time = infos[3];
                 double northing = Double.parseDouble(infos[4]);
                 double easting = Double.parseDouble(infos[5]);
+
                 long pixelId = getPixelID(northing, easting); //get the pixel that could include the current gps record
-//                System.out.println("current pixel id "+pixelId);
 
                 //Store the visited information
                 if (pixelId != -1) {
