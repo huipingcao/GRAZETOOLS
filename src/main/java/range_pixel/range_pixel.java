@@ -26,7 +26,7 @@ public class range_pixel {
 
     //    String GPSData = "data/pixel/sample_gps.csv";
     String pixelPath = "pixel.csv";
-    String GPSData = "coordinate_pointscsv";
+    String GPSData = "coordinate_points.csv";
 
 //    String pixelPath = "data/pixel/pixel.csv";
 //    String GPSData = "data/pixel/coordinate_points.csv";
@@ -82,16 +82,17 @@ public class range_pixel {
         BufferedReader in = new BufferedReader(inp);
         String str = null;
         try {
-            System.out.println("Enter cordination file name (Default: coordinate_points.csv): ");
-            str = in.readLine();
-            if (str.trim().length() > 0) {
-                this.pixelPath = str;
-            }
             //process weather file names
-            System.out.println("Enter Pixel file name (Default: pixel.csv) : ");
+            System.out.println("Enter coordinate file name (Default: coordinate_points.csv) : ");
             str = in.readLine();
             if (str.trim().length() > 0) {
                 this.GPSData = str;
+            }
+
+            System.out.println("Enter pixel file name (Default: pixel.csv): ");
+            str = in.readLine();
+            if (str.trim().length() > 0) {
+                this.pixelPath = str;
             }
 
             System.out.println("Enter meters of the range (Default: 30) : ");
@@ -793,6 +794,9 @@ public class range_pixel {
             br = new BufferedReader(new FileReader(this.pixelPath));
             String line = null;
             while ((line = br.readLine()) != null) {
+//                System.out.println("============debugging============");
+                System.out.println(line);
+//                System.out.println("============debugging============");
                 linenumber++;
                 //jump the header
                 if (linenumber == 1) {
